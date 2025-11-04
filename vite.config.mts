@@ -7,14 +7,12 @@ import { fileURLToPath } from "node:url";
 const __dirname = fileURLToPath(new URL(".", import.meta.url));
 
 export default defineConfig({
-  // Keep project root default (repository root)
   server: {
     port: 8080,
   },
   publicDir: "public",
   resolve: {
     alias: [
-      // Map internal Excalidraw packages
       {
         find: /^@excalidraw\/common$/,
         replacement: path.resolve(__dirname, "packages/common/src/index.ts"),
@@ -66,12 +64,17 @@ export default defineConfig({
     sourcemap: true,
     assetsInlineLimit: 0,
   },
+  esbuild: {
+    logOverride: { 'this-is-undefined-in-esm': 'silent' }
+  },
   optimizeDeps: {
-    exclude: ["excalidraw-app"]
+    exclude: ["excalidraw-app"],
+    esbuildOptions: {
+      target: "esnext"
+    }
   },
   plugins: [
     react(),
-    // Needed to resolve `virtual:pwa-register` used by the app entry
     VitePWA({
       registerType: "autoUpdate",
       workbox: {
