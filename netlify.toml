@@ -1,6 +1,6 @@
 [build]
   base = "Desktop/newww"
-  command = "yarn install --ignore-engines && yarn build:packages && yarn --cwd ./excalidraw-app build:app:netlify && yarn --cwd ./excalidraw-app build:version"
+  command = "yarn install --ignore-engines --frozen-lockfile && yarn build:packages && yarn --cwd ./excalidraw-app build:app:netlify && yarn --cwd ./excalidraw-app build:version"
   publish = "excalidraw-app/build"
 
 [build.environment]
@@ -30,3 +30,4 @@
   for = "/*.woff2"
   [headers.values]
     Cache-Control = "public, max-age=31536000, immutable"
+
