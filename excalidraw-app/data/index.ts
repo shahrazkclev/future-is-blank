@@ -313,9 +313,10 @@ export const exportToBackend = async (
       maxBytes: FILE_UPLOAD_MAX_BYTES,
     });
 
+    const payloadBlob = new Blob([payload.buffer as ArrayBuffer]);
     const response = await fetch(BACKEND_V2_POST, {
       method: "POST",
-      body: payload.buffer,
+      body: payloadBlob,
     });
     const json = await response.json();
     if (json.id) {
