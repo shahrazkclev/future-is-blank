@@ -1,5 +1,5 @@
 import React from 'react';
-import { Excalidraw } from '@excalidraw/excalidraw';
+import { Excalidraw } from 'excalidraw';
 
 function App() {
   return (
