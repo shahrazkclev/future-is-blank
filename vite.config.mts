@@ -7,56 +7,57 @@ import { fileURLToPath } from "node:url";
 const __dirname = fileURLToPath(new URL(".", import.meta.url));
 
 export default defineConfig({
-  // Keep project root default (repository root). We proxy-load the Excalidraw app via src/main.tsx
+  // Keep project root default (repository root)
   server: {
     port: 8080,
   },
+  publicDir: "public",
   resolve: {
     alias: [
-      // Map internal Excalidraw packages used in the imported app
+      // Map internal Excalidraw packages
       {
         find: /^@excalidraw\/common$/,
-        replacement: path.resolve(__dirname, "Desktop/newww/packages/common/src/index.ts"),
+        replacement: path.resolve(__dirname, "packages/common/src/index.ts"),
       },
       {
         find: /^@excalidraw\/common\/(.*?)/,
-        replacement: path.resolve(__dirname, "Desktop/newww/packages/common/src/$1"),
+        replacement: path.resolve(__dirname, "packages/common/src/$1"),
       },
       {
         find: /^@excalidraw\/element$/,
-        replacement: path.resolve(__dirname, "Desktop/newww/packages/element/src/index.ts"),
+        replacement: path.resolve(__dirname, "packages/element/src/index.ts"),
       },
       {
         find: /^@excalidraw\/element\/(.*?)/,
-        replacement: path.resolve(__dirname, "Desktop/newww/packages/element/src/$1"),
+        replacement: path.resolve(__dirname, "packages/element/src/$1"),
       },
       {
         find: /^@excalidraw\/excalidraw$/,
-        replacement: path.resolve(__dirname, "Desktop/newww/packages/excalidraw/index.tsx"),
+        replacement: path.resolve(__dirname, "packages/excalidraw/index.tsx"),
       },
       {
         find: /^@excalidraw\/excalidraw\/(.*?)/,
-        replacement: path.resolve(__dirname, "Desktop/newww/packages/excalidraw/$1"),
+        replacement: path.resolve(__dirname, "packages/excalidraw/$1"),
       },
       {
         find: /^@excalidraw\/math$/,
-        replacement: path.resolve(__dirname, "Desktop/newww/packages/math/src/index.ts"),
+        replacement: path.resolve(__dirname, "packages/math/src/index.ts"),
       },
       {
         find: /^@excalidraw\/math\/(.*?)/,
-        replacement: path.resolve(__dirname, "Desktop/newww/packages/math/src/$1"),
+        replacement: path.resolve(__dirname, "packages/math/src/$1"),
       },
       {
         find: /^@excalidraw\/utils$/,
-        replacement: path.resolve(__dirname, "Desktop/newww/packages/utils/src/index.ts"),
+        replacement: path.resolve(__dirname, "packages/utils/src/index.ts"),
       },
       {
         find: /^@excalidraw\/utils\/(.*?)/,
-        replacement: path.resolve(__dirname, "Desktop/newww/packages/utils/src/$1"),
+        replacement: path.resolve(__dirname, "packages/utils/src/$1"),
       },
       {
         find: /^excalidraw-app\/(.*?)/,
-        replacement: path.resolve(__dirname, "Desktop/newww/excalidraw-app/$1"),
+        replacement: path.resolve(__dirname, "excalidraw-app/$1"),
       },
     ],
   },
@@ -64,6 +65,9 @@ export default defineConfig({
     outDir: "build",
     sourcemap: true,
     assetsInlineLimit: 0,
+  },
+  optimizeDeps: {
+    exclude: ["excalidraw-app"]
   },
   plugins: [
     react(),
