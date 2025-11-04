@@ -1,31 +1,22 @@
 import path from "path";
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
-import svgrPlugin from "vite-plugin-svgr";
-import { ViteEjsPlugin } from "vite-plugin-ejs";
 import { VitePWA } from "vite-plugin-pwa";
-import { createHtmlPlugin } from "vite-plugin-html";
+import { fileURLToPath } from "node:url";
 
-const __dirname = path.dirname(new URL(import.meta.url).pathname);
+const __dirname = fileURLToPath(new URL(".", import.meta.url));
 
 export default defineConfig({
-  root: path.resolve(__dirname, "Desktop/newww/excalidraw-app"),
-  publicDir: path.resolve(__dirname, "Desktop/newww/public"),
-  envDir: path.resolve(__dirname, "Desktop/newww"),
-  
+  // Keep project root default (repository root). We proxy-load the Excalidraw app via src/main.tsx
   server: {
     port: 8080,
-    open: true,
   },
-
   resolve: {
     alias: [
+      // Map internal Excalidraw packages used in the imported app
       {
         find: /^@excalidraw\/common$/,
-        replacement: path.resolve(
-          __dirname,
-          "Desktop/newww/packages/common/src/index.ts",
-        ),
+        replacement: path.resolve(__dirname, "Desktop/newww/packages/common/src/index.ts"),
       },
       {
         find: /^@excalidraw\/common\/(.*?)/,
@@ -33,10 +24,7 @@ export default defineConfig({
       },
       {
         find: /^@excalidraw\/element$/,
-        replacement: path.resolve(
-          __dirname,
-          "Desktop/newww/packages/element/src/index.ts",
-        ),
+        replacement: path.resolve(__dirname, "Desktop/newww/packages/element/src/index.ts"),
       },
       {
         find: /^@excalidraw\/element\/(.*?)/,
@@ -44,10 +32,7 @@ export default defineConfig({
       },
       {
         find: /^@excalidraw\/excalidraw$/,
-        replacement: path.resolve(
-          __dirname,
-          "Desktop/newww/packages/excalidraw/index.tsx",
-        ),
+        replacement: path.resolve(__dirname, "Desktop/newww/packages/excalidraw/index.tsx"),
       },
       {
         find: /^@excalidraw\/excalidraw\/(.*?)/,
@@ -63,10 +48,7 @@ export default defineConfig({
       },
       {
         find: /^@excalidraw\/utils$/,
-        replacement: path.resolve(
-          __dirname,
-          "Desktop/newww/packages/utils/src/index.ts",
-        ),
+        replacement: path.resolve(__dirname, "Desktop/newww/packages/utils/src/index.ts"),
       },
       {
         find: /^@excalidraw\/utils\/(.*?)/,
@@ -78,17 +60,14 @@ export default defineConfig({
       },
     ],
   },
-
   build: {
     outDir: "build",
     sourcemap: true,
     assetsInlineLimit: 0,
   },
-
   plugins: [
     react(),
-    svgrPlugin(),
-    ViteEjsPlugin(),
+    // Needed to resolve `virtual:pwa-register` used by the app entry
     VitePWA({
       registerType: "autoUpdate",
       workbox: {
@@ -105,25 +84,14 @@ export default defineConfig({
         name: "CleverPoly Scriptor",
         description: "Collaborative whiteboard tool",
         icons: [
-          {
-            src: "android-chrome-192x192.png",
-            sizes: "192x192",
-            type: "image/png",
-          },
-          {
-            src: "apple-touch-icon.png",
-            type: "image/png",
-            sizes: "180x180",
-          },
+          { src: "android-chrome-192x192.png", sizes: "192x192", type: "image/png" },
+          { src: "apple-touch-icon.png", sizes: "180x180", type: "image/png" },
         ],
         start_url: "/",
         display: "standalone",
         theme_color: "#121212",
         background_color: "#ffffff",
       },
-    }),
-    createHtmlPlugin({
-      minify: true,
     }),
   ],
 });
